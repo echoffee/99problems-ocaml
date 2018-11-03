@@ -179,7 +179,42 @@ rotate [1; 2; 3; 4; 5; 6; 7; 8] (-2);; (* = [7; 8; 1; 2; 3; 4; 5; 6] *)
 *)
 
 (* 20 *)
-let remove_at i l =
+let remove_at i l = 
         let rec remove_at_acc res i l =
                 if i = 0 then concatenate (rev res) (List.tl l) else remove_at_acc ((List.hd l) :: res) (i - 1) (List.tl l) 
         in remove_at_acc [] i l;;
+
+(* 21 *)
+let insert_at x n l =
+        let rec insert_at_acc res x n l = 
+                if n = 0 then concatenate (rev (x :: res)) l else 
+                insert_at_acc ((List.hd l) :: res) x (n - 1) (List.tl l)
+        in insert_at_acc [] x n l;;
+
+(* 22 *)
+let range f t = 
+        let rec range_acc res i t = if i = t then rev (i :: res)
+                else let next  = if i < t then i + 1 else i - 1 in
+                        range_acc (i :: res) next t
+        in range_acc [] f t;;
+
+(* 23 *)
+Random.self_init;;
+let rand_pick l = let len = length(l) in
+        let p = Random.int len in
+        at (p + 1) l;;
+
+let rand_select l n =
+        let rec rand_select_acc res l n =
+                if n = 0 then res else
+                let p = Random.int (length(l)) in
+                rand_select_acc ((at (p + 1) l) :: res) (remove_at p l) (n - 1)
+        in rand_select_acc [] l n;;
+
+(* 24 *)
+let lotto_select n l = rand_select (range 1 l) n;;
+
+(* 25 *)
+let permutation l = rand_select l (length l);;
+
+
